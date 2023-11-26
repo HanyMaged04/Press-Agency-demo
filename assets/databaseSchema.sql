@@ -22,15 +22,19 @@ create table userInfo.users (
 );
 
 
---post schema
---(posts)post id - post description - ownerId -bytes
---(comments) comments id- post id - userId - comment
---(saved post) postId - userId
-create schema posts;
 
+create schema posts;
+create table posts.postTypes(
+    id int primary key,
+    typeName varchar(255)
+);
 create table posts.post(
     postId int AUTO_INCREMENT primary key,
-    description varchar(1024) CHARACTER SET utf8mb4,
+    title varchar(255) CHARACTER SET utf8mb4,
+    body varchar(1024) CHARACTER SET utf8mb4,
+    creationTime  DATE DEFAULT CURRENT_DATE,
+    postType int foreign key references posts.post(id);
+    numViews int default(0),
     urlToPhoto varchar(255) default NULL,
     likesNum int default(0),
     commentNum int default(0),
