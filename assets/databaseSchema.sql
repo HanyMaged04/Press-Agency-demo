@@ -60,3 +60,10 @@ CREATE TABLE posts.savedPost (
     FOREIGN KEY (userId) REFERENCES userInfo.users(id),
     PRIMARY KEY (userId, postId)
 );
+CREATE TABLE posts.likes(
+    postId INT,
+    userId INT,
+    FOREIGN KEY (postId) REFERENCES posts.post(postId),
+    FOREIGN KEY (userId) REFERENCES userInfo.users(id),
+    PRIMARY KEY (userId, postId)
+);
