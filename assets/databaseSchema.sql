@@ -11,8 +11,8 @@ create table userInfo.types(
 
 create table userInfo.users (
     id int AUTO_INCREMENT primary key,
-    fname nvarchar(255) not null,
-    lname nvarchar(255) not null,
+    fname varchar(255) CHARACTER SET utf8mb4 not null,
+    lname varchar(255) CHARACTER SET utf8mb4 not null,
     phoneNum varchar(11) not null,
     email varchar(255) not null unique ,
     userType int foreign key references userInfo.types(id),
@@ -30,7 +30,7 @@ create schema posts;
 
 create table posts.post(
     postId int AUTO_INCREMENT primary key,
-    description nvarchar(1024),
+    description varchar(1024) CHARACTER SET utf8mb4,
     urlToPhoto varchar(255) default NULL,
     likesNum int default(0),
     commentNum int default(0),
