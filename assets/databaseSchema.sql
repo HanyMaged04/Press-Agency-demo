@@ -18,7 +18,7 @@ CREATE TABLE postTypes (
 
 CREATE TABLE post (
     postId INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) CHARACTER SET utf8mb4, -- 'utf8mb4' to allows as to write in Arabic  
+    title VARCHAR(255) CHARACTER SET utf8mb4, -- 'utf8mb4' to allows us to write in Arabic  
     body VARCHAR(2048) CHARACTER SET utf8mb4,
     creationTime DATE DEFAULT CURRENT_DATE,
     postType INT,                           
