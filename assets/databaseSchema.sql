@@ -1,20 +1,16 @@
-CREATE DATABASE TestProjectPhp;
-USE TestProjectPhp;
+CREATE DATABASE PRESS_AGENCY;
+USE PRESS_AGENCY;
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    type VARCHAR(255) NOT NULL,
+    userType VARCHAR(255) NOT NULL,
     fname VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL,
     lname VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL,
-    phoneNum VARCHAR(11) NOT NULL,
-    email email NOT NULL UNIQUE,
-    userType INT,
-    password VARCHAR(255) NOT NULL,
-    urlToPhoto VARCHAR(255) DEFAULT NULL,
-    CONSTRAINT UniqueName UNIQUE (fname, lname)
+    email VARCHAR(255) NOT NULL UNIQUE,
+    phoneNum CHAR(11) NOT NULL,
+    password VARCHAR(255) NOT NULL, 
+    urlToPhoto VARCHAR(255) DEFAULT NULL
 );
-
-
 CREATE TABLE postTypes (
     id INT PRIMARY KEY,
     typeName VARCHAR(255)
@@ -22,38 +18,44 @@ CREATE TABLE postTypes (
 
 CREATE TABLE post (
     postId INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) CHARACTER SET utf8mb4,
-    body VARCHAR(1024) CHARACTER SET utf8mb4,
+    title VARCHAR(255) CHARACTER SET utf8mb4, -- 'utf8mb4' to allows as to write in Arabic  
+    body VARCHAR(2048) CHARACTER SET utf8mb4,
     creationTime DATE DEFAULT CURRENT_DATE,
-    postType INT,
+    postType INT,                           
+    /*we used another table to lower the memory coast 
+    (if there is 10000 post and we write the postType in string this will cost a lot of memory 
+    but with another table we write the string only once and after that we use int references) */
     numViews INT DEFAULT 0,
     urlToPhoto VARCHAR(255) DEFAULT NULL,
     likesNum INT DEFAULT 0,
+    dislikesNum INT DEFAULT 0,
     commentNum INT DEFAULT 0,
     ownerId INT,
-    FOREIGN KEY (postType) REFERENCES  postTypes(id),
-    FOREIGN KEY (ownerId) REFERENCES  users(id)
+    FOREIGN KEY (postType) REFERENCES  postTypes(id) ON DELETE SET NULL,
+    FOREIGN KEY (ownerId) REFERENCES  users(id)  ON DELETE CASCADE
 );
 
 CREATE TABLE comments (
-    postId INT,
-    userId INT,
+    postId INT NOT NULL,
+    userId INT NOT NULL,
     comment VARCHAR(1024) NOT NULL,
-    FOREIGN KEY (postId) REFERENCES  post(postId),
-    FOREIGN KEY (userId) REFERENCES  users(id)
+    FOREIGN KEY (postId) REFERENCES  post(postId) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES  users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE savedPost (
     postId INT,
     userId INT,
-    FOREIGN KEY (postId) REFERENCES  post(postId),
-    FOREIGN KEY (userId) REFERENCES  users(id),
+    FOREIGN KEY (postId) REFERENCES  post(postId) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES  users(id) ON DELETE CASCADE,
     PRIMARY KEY (userId, postId)
 );
 CREATE TABLE likes(
     postId INT,
     userId INT,
-    FOREIGN KEY (postId) REFERENCES  post(postId),
-    FOREIGN KEY (userId) REFERENCES  users(id),
+    status INT DEFAULT 0,
+    FOREIGN KEY (postId) REFERENCES  post(postId) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES  users(id) ON DELETE CASCADE,
     PRIMARY KEY (userId, postId)
+    -- STATUS ( -1 -> dislike || 0 -> no react || 1 -> like)
 );
